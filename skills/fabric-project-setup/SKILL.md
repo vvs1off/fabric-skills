@@ -50,11 +50,17 @@ Version numbers in your training data are stale. Fetch them every time:
 | Canonical template | https://github.com/FabricMC/fabric-example-mod or the generator at https://fabricmc.net/develop/template/ |
 | Docs for your exact version | https://docs.fabricmc.net/develop/ (use the version selector in the header) |
 
+| Latest Minecraft release vs snapshot (fallback if meta is unreachable) | `https://piston-meta.mojang.com/mc/game/version_manifest_v2.json` -> `latest.release` |
+| Fabric API builds as Maven metadata | `https://maven.fabricmc.net/net/fabricmc/fabric-api/fabric-api/maven-metadata.xml` (pick versions ending in `+<your mc version>`) |
+
 If you cannot reach the network, say so and leave clearly marked placeholders
 (`minecraft_version=<CHECK fabricmc.net/develop>`) instead of guessing.
 
-Prefer the **latest stable** Minecraft release (meta marks it `"stable": true`); do not pick a
-snapshot, pre-release or release candidate unless asked.
+Prefer the **latest stable** Minecraft release (meta marks it `"stable": true`; Mojang's
+manifest lists it as `latest.release`); do not pick a snapshot, pre-release or release
+candidate unless asked. Beware: Fabric API is also built for snapshots, so the `<latest>` in
+the Maven metadata is often a snapshot build (e.g. `+26.4` while 26.4 is still a snapshot).
+Never treat "a Fabric API build exists" as "this Minecraft version is released".
 
 ## Step 2 - Standard layout
 
@@ -233,7 +239,7 @@ Java release: 21 for 1.20.5 - 1.21.x, 17 for 1.18 - 1.20.4. The distributable ja
     "fabricloader": ">=<loader_version>",
     "minecraft": "~<minecraft_version>",
     "java": ">=<java_release>",
-    "fabric-api": "*"
+    "fabric-api": ">=<fabric_api_version without +mc suffix>"
   }
 }
 ```
@@ -245,6 +251,9 @@ Rules that are easy to get wrong:
 - `"version": "${version}"` is expanded by `processResources`; do not hardcode it.
 - `"environment"`: `"*"` (both), `"client"` (client-only mod, e.g. HUD/minimap mods) or
   `"server"`. A client-only mod should still keep client code in `src/client`.
+- `"fabric-api"`: prefer a lower bound such as `">=0.165.0"` (the version you build against)
+  over `"*"`, so players with an older Fabric API get a clear Loader error instead of a
+  `NoClassDefFoundError` crash.
 - `"minecraft"` range: `~1.21.4` means `>=1.21.4 <1.22`; for year-based versions `~26.3` means
   `>=26.3 <26.4`. Use an exact or tilde range - `"*"` lets users crash on incompatible versions.
 - Every entrypoint class must exist at that exact fully-qualified name.

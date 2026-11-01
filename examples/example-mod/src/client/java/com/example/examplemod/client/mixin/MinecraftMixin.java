@@ -15,7 +15,7 @@ import net.minecraft.client.Minecraft;
  */
 @Mixin(Minecraft.class)
 public abstract class MinecraftMixin {
-	@ModifyReturnValue(method = "createTitle", at = @At("RETURN"))
+	@ModifyReturnValue(method = "createTitle()Ljava/lang/String;", at = @At("RETURN"))
 	private String examplemod$appendModName(String original) {
 		return original + " | Example Mod";
 	}

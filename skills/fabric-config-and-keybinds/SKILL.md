@@ -107,6 +107,7 @@ import com.example.examplemod.ExampleMod;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
+import java.nio.file.AtomicMoveNotSupportedException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -142,7 +143,11 @@ public final class ExampleConfig {
             try (Writer writer = Files.newBufferedWriter(tmp)) {
                 GSON.toJson(instance, writer);
             }
-            Files.move(tmp, PATH, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
+            try {
+                Files.move(tmp, PATH, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
+            } catch (AtomicMoveNotSupportedException e) {   // some network/synced drives
+                Files.move(tmp, PATH, StandardCopyOption.REPLACE_EXISTING);
+            }
         } catch (IOException e) {
             ExampleMod.LOGGER.error("Could not save config {}", PATH, e);
         }

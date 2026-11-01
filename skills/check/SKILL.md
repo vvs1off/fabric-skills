@@ -21,7 +21,12 @@ Use the checklists from `fabric-project-setup`, `fabric-mixins`, `fabric-network
   Yarn/Mojang mappings). Flag mixtures (e.g. a `mappings` line on 26.1+, `modImplementation` with
   non-remapping Loom, `implementation` for mods with remapping Loom).
 - Compare versions with https://fabricmc.net/develop/ for that Minecraft version, if reachable;
-  report outdated Loader/Fabric API/Loom (informational, not an error).
+  report outdated Loader/Fabric API/Loom (informational, not an error). When mentioning newer
+  Minecraft versions, check whether they are **releases or snapshots** (Mojang's
+  `version_manifest_v2.json` `latest.release`, or `stable` in meta.fabricmc.net); Fabric API
+  Maven metadata also lists snapshot builds and must not be reported as a release.
+- `-SNAPSHOT` / `+` dynamic versions (e.g. `loom_version=1.19-SNAPSHOT`) make builds
+  non-reproducible; suggest pinning for release builds.
 - Java release consistency: `options.release`, `sourceCompatibility`, mixin
   `compatibilityLevel`, `fabric.mod.json` `"java"`.
 
@@ -36,6 +41,7 @@ Use the checklists from `fabric-project-setup`, `fabric-mixins`, `fabric-network
   `java`, `fabric-api` present when used. Optional integrations in `suggests`/`recommends`,
   not `depends`.
 - Every mixin config listed exists; client configs have `"environment": "client"`.
+- The `icon` path (if set) exists under `src/*/resources`.
 - `accessWidener` file exists and is also set in `loom.accessWidenerPath`.
 
 ### 3. Client/server separation

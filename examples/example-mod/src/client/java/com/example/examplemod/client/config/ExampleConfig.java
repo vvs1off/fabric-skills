@@ -3,6 +3,7 @@ package com.example.examplemod.client.config;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
+import java.nio.file.AtomicMoveNotSupportedException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -60,7 +61,12 @@ public final class ExampleConfig {
 				GSON.toJson(instance, writer);
 			}
 
-			Files.move(tmp, PATH, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
+			try {
+				Files.move(tmp, PATH, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
+			} catch (AtomicMoveNotSupportedException e) {
+				// Some network or synced drives cannot rename atomically.
+				Files.move(tmp, PATH, StandardCopyOption.REPLACE_EXISTING);
+			}
 		} catch (IOException e) {
 			ExampleMod.LOGGER.error("Could not save config {}", PATH, e);
 		}

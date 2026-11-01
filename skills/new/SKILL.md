@@ -54,7 +54,9 @@ Then write, per `fabric-project-setup`:
   `client` entrypoint.
 - Mixin config(s) with **no mixins yet** (`"mixins": []`), `defaultRequire: 1`, and the right
   `compatibilityLevel`. Do not add example mixins the user did not ask for.
-- `assets/<modid>/lang/en_us.json` and a placeholder note for `assets/<modid>/icon.png`.
+- `assets/<modid>/lang/en_us.json`. Only add `"icon"` to `fabric.mod.json` if you actually
+  create `assets/<modid>/icon.png` (e.g. the user provides one); otherwise omit the field and
+  tell the user how to add an icon later. Never reference files that do not exist.
 - `.gitignore` (at least `.gradle/ build/ run/ out/ .idea/ *.iml .vscode/ logs/ crash-reports/
   .env *.key *.jks`) and `.gitattributes` (`gradlew text eol=lf`, `*.bat text eol=crlf`).
 - A short `README.md` and, if the user wants, a `LICENSE` (ask which one; do not assume).

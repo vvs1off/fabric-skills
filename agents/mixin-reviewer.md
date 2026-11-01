@@ -18,11 +18,15 @@ files. Your output is a prioritized list of findings with concrete fixes.
    - Older: remapping Loom with Yarn or Mojang mappings. Target strings must use the project's
      mappings.
 3. List every mixin class (`@Mixin`), its target(s) and every injector annotation.
-4. If decompiled sources exist (after `./gradlew genSources`, typically under
-   `.gradle/loom-cache` or the Gradle user cache as `*-sources.jar`), use them to verify
-   target method names and descriptors. You may run `./gradlew genSources` if no sources are
-   present and the user's environment allows it. If you cannot verify a target, say so
-   explicitly instead of assuming it is correct.
+4. Verify targets against decompiled sources:
+   - Find them: `find .gradle/loom-cache -name "*-sources.jar"` (26.1+ projects put
+     `minecraft-common-*-sources.jar` and `minecraft-clientOnly-*-sources.jar` under
+     `.gradle/loom-cache/minecraftMaven/`; older projects may use the Gradle user cache
+     `~/.gradle/caches/fabric-loom/`).
+   - If none exist, run `./gradlew genSources` when your tools allow it.
+   - Read a class without extracting everything:
+     `unzip -p <sources.jar> net/minecraft/client/Minecraft.java | grep -n "createTitle"`.
+   - If you still cannot verify a target, say so explicitly instead of assuming it is correct.
 
 ## Check each mixin for
 
