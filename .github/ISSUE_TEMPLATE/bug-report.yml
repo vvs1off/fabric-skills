@@ -1,0 +1,28 @@
+name: Bug report
+description: The plugin, a command, the agent, the example mod or CI does not work.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: Please remove usernames, file paths, tokens and server addresses from logs before posting.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: Steps to reproduce, what you expected, what happened instead.
+    validations:
+      required: true
+  - type: input
+    id: claude
+    attributes:
+      label: Claude Code version
+      placeholder: output of `claude --version`
+  - type: input
+    id: os
+    attributes:
+      label: Operating system
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant output or logs
+      render: text

@@ -1,0 +1,37 @@
+name: Wrong or outdated skill content
+description: A skill taught Claude something that does not compile, crashes, or is outdated.
+labels: ["skill-correction"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks! Corrections are the most valuable contributions to this project.
+        Please do not paste tokens, personal paths or private server details.
+  - type: input
+    id: skill
+    attributes:
+      label: Skill or command
+      placeholder: fabric-networking, /fabric-skills:port, ...
+    validations:
+      required: true
+  - type: input
+    id: versions
+    attributes:
+      label: Minecraft / Fabric Loader / Fabric API versions
+      placeholder: "Minecraft 26.3, Loader 0.x.y, Fabric API 0.x.y+26.3"
+    validations:
+      required: true
+  - type: textarea
+    id: wrong
+    attributes:
+      label: What is wrong
+      description: Quote the part of the skill and what Claude produced because of it.
+    validations:
+      required: true
+  - type: textarea
+    id: correct
+    attributes:
+      label: What is correct, and how you verified it
+      description: Link to docs, Fabric API source, or decompiled class/method for that version.
+    validations:
+      required: true

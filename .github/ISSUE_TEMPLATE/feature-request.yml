@@ -1,0 +1,20 @@
+name: Feature or new skill request
+description: Suggest a new skill, command, agent or improvement.
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What do you want Claude to do better?
+      description: Describe the modding task and where the agent currently goes wrong.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposal
+      description: New skill, changes to an existing one, a command, examples of prompts...
+  - type: input
+    id: versions
+    attributes:
+      label: Minecraft / loader versions involved (if any)

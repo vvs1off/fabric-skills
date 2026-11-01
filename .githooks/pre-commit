@@ -1,0 +1,45 @@
+#!/bin/sh
+# Blocks commits that add secret files or obvious credentials.
+# Enable once per clone:   git config core.hooksPath .githooks
+# Uses gitleaks when it is installed; the built-in checks below always run.
+
+fail=0
+staged=$(git diff --cached --name-only --diff-filter=ACMR)
+
+[ -z "$staged" ] && exit 0
+
+# 1. Forbidden file names
+for f in $staged; do
+	base=$(basename "$f")
+	case "$base" in
+		.env|.env.*|*.key|*.pem|*.p12|*.pfx|*.jks|*.keystore|*.gpg|secrets.*|local.properties|id_rsa*|id_ed25519*)
+			echo "pre-commit: refusing to commit secret-like file: $f"
+			fail=1
+			;;
+	esac
+done
+
+# 2. Secret patterns in the staged content
+patterns='(ghp|gho|ghs|ghu)_[A-Za-z0-9]{30,}|github_pat_[A-Za-z0-9_]{40,}|mrp_[A-Za-z0-9]{30,}|AKIA[0-9A-Z]{16}|-----BEGIN [A-Z ]*PRIVATE KEY-----|xox[baprs]-[A-Za-z0-9-]{10,}|(api[_-]?key|secret|token|password)[[:space:]]*[:=][[:space:]]*["'"'"'][A-Za-z0-9_./+=-]{16,}["'"'"']'
+
+if git diff --cached -U0 --diff-filter=ACMR -- . ':(exclude).githooks/pre-commit' | grep -E '^\+' | grep -Eiq "$patterns"; then
+	echo "pre-commit: staged changes look like they contain a secret:"
+	git diff --cached -U0 --diff-filter=ACMR -- . ':(exclude).githooks/pre-commit' | grep -E '^\+' | grep -Ei "$patterns" | cut -c1-120
+	fail=1
+fi
+
+# 3. gitleaks, if available
+if command -v gitleaks >/dev/null 2>&1; then
+	if ! gitleaks git --staged --no-banner --redact >/dev/null 2>&1; then
+		echo "pre-commit: gitleaks found a potential secret. Run: gitleaks git --staged --verbose --redact"
+		fail=1
+	fi
+fi
+
+if [ "$fail" -ne 0 ]; then
+	echo "pre-commit: commit blocked. Remove the secret (and rotate it if it was real)."
+	echo "            For a verified false positive: git commit --no-verify"
+	exit 1
+fi
+
+exit 0
