@@ -1,0 +1,29 @@
+{
+	"schemaVersion": 1,
+	"id": "examplemod",
+	"version": "${version}",
+	"name": "Example Mod",
+	"description": "Minimal client-side Fabric mod: a toggleable HUD element, a key binding, one mixin and a JSON config.",
+	"authors": ["fabric-skills contributors"],
+	"contact": {
+		"sources": "https://github.com/vvs1off/fabric-skills"
+	},
+	"license": "MIT",
+	"icon": "assets/examplemod/icon.png",
+	"environment": "client",
+	"entrypoints": {
+		"client": ["com.example.examplemod.client.ExampleModClient"]
+	},
+	"mixins": [
+		{
+			"config": "examplemod.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.20.1",
+		"minecraft": "~26.3",
+		"java": ">=25",
+		"fabric-api": "*"
+	}
+}

@@ -11,18 +11,24 @@ server also reads it.
 
 ## Step 0 - Names for your version
 
-| | 26.1+ (Mojang) | 1.21.x Mojang mappings | Yarn (<= 1.21.11) |
-|---|---|---|---|
-| Helper | `KeyMappingHelper.registerKeyMapping` (`...client.keymapping.v1`) | `KeyBindingHelper.registerKeyBinding` (`...client.keybinding.v1`) | `KeyBindingHelper.registerKeyBinding` |
-| Vanilla class | `KeyMapping` | `KeyMapping` | `KeyBinding` |
-| "was pressed" | `consumeClick()` | `consumeClick()` | `wasPressed()` |
-| Key codes | `InputConstants.KEY_J` | `InputConstants.KEY_J` / `GLFW.GLFW_KEY_J` | `GLFW.GLFW_KEY_J` with `InputUtil.Type.KEYSYM` |
-| Category | `KeyMapping.Category.register(id)` (object) | object since 1.21.9, a translation-key **string** before | same split as Mojang |
+| | 26.3+ (SDL input) | 26.1 - 26.2 | 1.21.x Mojang mappings | Yarn (<= 1.21.11) |
+|---|---|---|---|---|
+| Helper | `KeyMappingHelper.registerKeyMapping` (`...client.keymapping.v1`) | same as 26.3 | `KeyBindingHelper.registerKeyBinding` (`...client.keybinding.v1`) | `KeyBindingHelper.registerKeyBinding` |
+| Vanilla class | `KeyMapping` | `KeyMapping` | `KeyMapping` | `KeyBinding` |
+| "was pressed" | `consumeClick()` | `consumeClick()` | `consumeClick()` | `wasPressed()` |
+| Input type | `InputConstants.Type.KEYBOARD` | `InputConstants.Type.KEYSYM` | `InputConstants.Type.KEYSYM` | `InputUtil.Type.KEYSYM` |
+| Key codes | `InputConstants.KEY_H` (**SDL scancodes**; raw: `org.lwjgl.sdl.SDLScancode.SDL_SCANCODE_H`) | `InputConstants.KEY_H` (GLFW key codes) | `InputConstants.KEY_H` / `GLFW.GLFW_KEY_H` | `GLFW.GLFW_KEY_H` |
+| Category | `KeyMapping.Category.register(id)` (object) | same | object since 1.21.9, a translation-key **string** before | same split as Mojang |
 
-Confirm in Fabric API's sources for your version before writing code. Docs:
-https://docs.fabricmc.net/develop/key-mappings
+**Minecraft 26.3 replaced GLFW with SDL for input.** `InputConstants.Type.KEYSYM` no longer
+exists, key codes are SDL scancodes (numerically different from GLFW codes), and any
+`org.lwjgl.glfw.GLFW` usage stops compiling. Always use the `InputConstants.KEY_*` constants
+instead of raw numbers or GLFW constants so the code survives these changes.
 
-## Key bindings (26.1+ shown)
+Confirm in the decompiled sources for your version before writing code (`InputConstants`,
+`KeyMapping` constructors). Docs: https://docs.fabricmc.net/develop/key-mappings
+
+## Key bindings (26.3 shown)
 
 ```java
 package com.example.examplemod.client;
@@ -44,7 +50,7 @@ public class ExampleModClient implements ClientModInitializer {
     public void onInitializeClient() {
         toggleHud = KeyMappingHelper.registerKeyMapping(new KeyMapping(
             "key.examplemod.toggle_hud",       // translation key
-            InputConstants.Type.KEYSYM,        // KEYSYM = keyboard, MOUSE = mouse button
+            InputConstants.Type.KEYBOARD,      // KEYBOARD or MOUSE (26.1 - 26.2 and older: KEYSYM)
             InputConstants.KEY_H,              // default key; use InputConstants.UNKNOWN.getValue() for "unbound"
             CATEGORY
         ));

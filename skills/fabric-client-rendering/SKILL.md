@@ -61,7 +61,8 @@ public class ExampleModClient implements ClientModInitializer {
 
     private static void extractCoords(GuiGraphicsExtractor graphics, DeltaTracker delta) {
         Minecraft mc = Minecraft.getInstance();
-        if (mc.player == null || mc.options.hideGui || !ExampleConfig.get().showCoords) {
+        // F1 "hide HUD": mc.gui.hud.isHidden() on 26.3; mc.options.hideGui on older versions.
+        if (mc.player == null || mc.gui.hud.isHidden() || !ExampleConfig.get().showCoords) {
             return;
         }
         graphics.text(mc.font, CoordsText.current(mc.player), 4, 4, 0xFFFFFFFF, true);
@@ -76,7 +77,9 @@ wrapping a vanilla element). The API handles layering; you do not manage z offse
 
 Rules for HUD code:
 
-- Return early when `mc.player == null`, when `mc.options.hideGui` is on (F1), and when your
+- Return early when `mc.player == null`, when the HUD is hidden with F1 (`mc.gui.hud.isHidden()`
+  on 26.3, `mc.options.hideGui` on older versions - Fabric does not hide your element for
+  you), and when your
   feature is disabled. Also consider hiding while the F3 debug screen is open if your element
   would overlap it (look up the debug-overlay accessor in your version's sources).
 - Position relative to `graphics.guiWidth()` / `graphics.guiHeight()` (scaled size), never
@@ -113,7 +116,7 @@ graphics.blit(RenderPipelines.GUI_TEXTURED, ExampleMod.id("textures/gui/icon.png
 graphics.blitSprite(RenderPipelines.GUI_TEXTURED, spriteId, x, y, w, h);   // GUI atlas sprite
 graphics.centeredText(font, component, centerX, y, 0xFFFFFFFF);
 graphics.setTooltipForNextFrame(font, component, mouseX, mouseY);
-// Item icons: the item-drawing method name has changed between versions - look it up.
+graphics.item(stack, x, y);               // item icon (26.x name; older: renderItem / drawItem)
 ```
 
 **Colors are ARGB since 1.21.6.** `0xFFFFFF` is fully transparent white and renders nothing.
@@ -239,7 +242,8 @@ version and copy its structure; do not adapt a world-rendering snippet from anot
 - Using deprecated `HudRenderCallback` on 1.21.6+, or a mixin into the vanilla `Gui` class
   for a simple overlay.
 - Allocating strings/components every frame, or doing world queries inside the HUD callback.
-- Not checking `mc.player == null` (crash on the title screen) or ignoring F1 `hideGui`.
+- Not checking `mc.player == null` (crash on the title screen) or ignoring the F1 hide-HUD
+  state.
 - Building widgets in the `Screen` constructor instead of `init()`.
 - Forgetting to call `super.extractRenderState(...)` / `super.render(...)` and losing the
   background and all widgets.

@@ -1,0 +1,16 @@
+# Normalize text files to LF in the repository
+* text=auto eol=lf
+
+# Unix scripts must keep LF even on Windows checkouts
+gradlew        text eol=lf
+*.sh           text eol=lf
+.githooks/*    text eol=lf
+
+# Windows scripts
+*.bat          text eol=crlf
+*.cmd          text eol=crlf
+
+# Binary files
+*.jar          binary
+*.png          binary
+*.gif          binary

@@ -84,7 +84,8 @@ public abstract class LivingEntityMixin {
         }
     }
 
-    @Inject(method = "getJumpPower", at = @At("RETURN"), cancellable = true)
+    // getJumpPower is overloaded (getJumpPower() and getJumpPower(float)): give the descriptor.
+    @Inject(method = "getJumpPower()F", at = @At("RETURN"), cancellable = true)
     private void examplemod$boostJump(CallbackInfoReturnable<Float> cir) {
         cir.setReturnValue(cir.getReturnValueF() * 1.5f);
     }
@@ -104,18 +105,18 @@ public abstract class LivingEntityMixin {
 ## MixinExtras - use these instead of @Redirect and most @ModifyVariable
 
 MixinExtras ships inside Fabric Loader (0.15+), so no extra dependency is needed. Imports are
-under `com.llamalab.mixinextras`. Docs: https://github.com/LlamaLad7/MixinExtras/wiki
+under `com.llamalad7.mixinextras`. Docs: https://github.com/LlamaLad7/MixinExtras/wiki
 
 ### @ModifyExpressionValue - change what a call/field read returns
 
 ```java
 @ModifyExpressionValue(
-    method = "travel",
+    method = "travelInWater",
     at = @At(value = "INVOKE",
              target = "Lnet/minecraft/world/entity/LivingEntity;getSpeed()F")
 )
 private float examplemod$fasterInWater(float original) {
-    return this.isInWater() ? original * 1.2f : original;
+    return original * 1.2f;
 }
 ```
 

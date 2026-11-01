@@ -142,7 +142,10 @@ Vanilla, Yarn -> Mojang (the names you will see most):
 
 26.1 -> 26.2 also renamed vanilla rendering entry points (for example `Screen#render` ->
 `extractRenderState`, `GuiGraphics#drawString` -> `text`, `minecraft.setScreen` ->
-`minecraft.gui.setScreen`). Expect similar churn in every release and verify in sources.
+`minecraft.gui.setScreen`). 26.3 replaced GLFW with **SDL** for input: `InputConstants.Type.KEYSYM`
+became `KEYBOARD`, key codes are SDL scancodes, and `org.lwjgl.glfw` imports stop compiling (use
+`InputConstants.KEY_*` constants). The F1 flag moved from `options.hideGui` to
+`gui.hud.isHidden()`. Expect similar churn in every release and verify in sources.
 
 ## Step 6 - Fix mixins (they fail at runtime, not compile time)
 

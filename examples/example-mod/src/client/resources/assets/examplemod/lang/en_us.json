@@ -1,0 +1,7 @@
+{
+	"key.category.examplemod.main": "Example Mod",
+	"key.examplemod.toggle_hud": "Toggle coordinates HUD",
+	"hud.examplemod.coordinates": "XYZ: %s / %s / %s",
+	"message.examplemod.hud_enabled": "Coordinates HUD enabled",
+	"message.examplemod.hud_disabled": "Coordinates HUD disabled"
+}
