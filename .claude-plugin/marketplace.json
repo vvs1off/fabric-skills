@@ -1,0 +1,14 @@
+{
+  "name": "fabric-skills",
+  "description": "Claude Code plugins for Minecraft Fabric mod development",
+  "owner": {
+    "name": "vvs1off"
+  },
+  "plugins": [
+    {
+      "name": "fabric-skills",
+      "source": "./",
+      "description": "Make Claude Code actually good at Minecraft Fabric modding."
+    }
+  ]
+}

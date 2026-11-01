@@ -1,0 +1,13 @@
+{
+  "name": "fabric-skills",
+  "displayName": "Fabric Skills",
+  "version": "0.1.0",
+  "description": "Skills, slash commands and a mixin-review agent that make Claude Code actually good at Minecraft Fabric modding: setup, mixins, rendering, networking, config, porting, crash debugging and releases.",
+  "author": {
+    "name": "vvs1off"
+  },
+  "homepage": "https://github.com/vvs1off/fabric-skills",
+  "repository": "https://github.com/vvs1off/fabric-skills",
+  "license": "MIT",
+  "keywords": ["minecraft", "fabric", "fabricmc", "minecraft-mod", "mixin", "claude-skills"]
+}
