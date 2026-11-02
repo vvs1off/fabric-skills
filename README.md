@@ -16,7 +16,7 @@
 
 <!-- TODO(maintainer): record a short demo (e.g. /fabric-skills:new -> working HUD mod) and save it as docs/demo.gif -->
 <p align="center">
-  <img src="docs/demo.gif" alt="Demo: Claude Code scaffolding and building a Fabric mod with fabric-skills" width="800">
+  <img src="docs/demoaa.gif" alt="Demo: Claude Code scaffolding and building a Fabric mod with fabric-skills" width="800">
 </p>
 
 AI coding agents write Fabric code from memory, and that memory is stale. Fabric changed more
