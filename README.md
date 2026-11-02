@@ -1,9 +1,10 @@
-<div align="center">
+4<div align="center">
 
 # fabric-skills
 
 **Make Claude Code actually good at Minecraft Fabric modding.**
 
+![demo](docs/demo.gif)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Validate skills](https://github.com/vvs1off/fabric-skills/actions/workflows/validate-skills.yml/badge.svg)](https://github.com/vvs1off/fabric-skills/actions/workflows/validate-skills.yml)
 [![Build example mod](https://github.com/vvs1off/fabric-skills/actions/workflows/build-example.yml/badge.svg)](https://github.com/vvs1off/fabric-skills/actions/workflows/build-example.yml)
